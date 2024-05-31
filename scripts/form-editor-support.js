@@ -111,11 +111,6 @@ async function instrumentForms(mutationsList) {
   annotateFormsForEditing(formsEl);
 }
 
-function cleanUp(content) {
-  const formDef = content.replaceAll('^(([^<>()\\\\[\\\\]\\\\\\\\.,;:\\\\s@\\"]+(\\\\.[^<>()\\\\[\\\\]\\\\\\\\.,;:\\\\s@\\"]+)*)|(\\".+\\"))@((\\\\[[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}])|(([a-zA-Z\\\\-0-9]+\\\\.)\\+[a-zA-Z]{2,}))$', '');
-  return formDef?.replace(/\x83\n|\n|\s\s+/g, '');
-}
-
 async function applyChanges(event) {
   // redecorate default content and blocks on patches (in the properties rail)
   const { detail } = event;
@@ -142,7 +137,7 @@ async function applyChanges(event) {
         const codeEl = newContainer?.querySelector('code');
         const jsonContent = codeEl?.textContent;
         if (jsonContent) {
-          const formDef = JSON.parse(cleanUp(jsonContent));
+          const formDef = JSON.parse(JSON.parse(jsonContent));
           const parent = element.closest('.panel-wrapper') || element.closest('form') || element.querySelector('form');
           const parentDef = getFieldById(formDef, parent.dataset.id, {});
           parent.replaceChildren();
